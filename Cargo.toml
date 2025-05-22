@@ -19,6 +19,7 @@ byteorder = "1.5.0"
 heed = { version = "0.22.0", default-features = false }
 tracing = "0.1.41"
 memmap2 = "0.9.5"
+ordered-float = "4.6.0"
 rand = { version = "0.8.5", features = ["alloc"] }
 rayon = "1.10.0"
 roaring = "0.10.9"
