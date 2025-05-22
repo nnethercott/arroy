@@ -63,8 +63,8 @@ pub trait Distance: Send + Sync + Sized + Clone + fmt::Debug + 'static {
 
     fn pq_distance(distance: f32, margin: f32, side: Side) -> f32 {
         match side {
-            Side::Left => (-margin).min(distance),
-            Side::Right => margin.min(distance),
+            Side::Left => ((-margin).min(distance)).exp2(),
+            Side::Right => (margin.min(distance)).exp2(),
         }
     }
 

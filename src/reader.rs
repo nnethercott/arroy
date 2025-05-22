@@ -7,6 +7,7 @@ use std::num::NonZeroUsize;
 use heed::types::DecodeIgnore;
 use heed::RoTxn;
 use roaring::RoaringBitmap;
+// use ordered_float::OrderedFloat;
 
 use crate::distance::Distance;
 use crate::internals::{KeyCodec, Side};
@@ -18,6 +19,7 @@ use crate::{
     TreeStats,
 };
 use crate::ordered_float::NonNegativeOrderedFloat as OrderedFloat;
+
 
 /// Options used to make a query against an arroy [`Reader`].
 pub struct QueryBuilder<'a, D: Distance> {
@@ -326,8 +328,9 @@ impl<'t, D: Distance> Reader<'t, D> {
                         Some(normal) => D::margin_no_header(&normal, &query_leaf.vector),
                         None => 0.0,
                     };
-                    queue.push((OrderedFloat(D::pq_distance(dist, margin, Side::Left)), left));
-                    queue.push((OrderedFloat(D::pq_distance(dist, margin, Side::Right)), right));
+                    // this is a similarity
+                    queue.push((OrderedFloat(D::pq_distance(dist, margin, Side::Left)), left)); // -margin
+                    queue.push((OrderedFloat(D::pq_distance(dist, margin, Side::Right)), right)); // margin
                 }
             }
         }
