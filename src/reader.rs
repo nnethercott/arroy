@@ -5,7 +5,6 @@ use std::num::NonZeroUsize;
 
 use heed::types::DecodeIgnore;
 use heed::RoTxn;
-use ordered_float::OrderedFloat;
 use roaring::RoaringBitmap;
 
 use crate::distance::Distance;
@@ -21,6 +20,7 @@ use crate::{
     Database, Error, ItemId, Key, MetadataCodec, Node, NodeId, Prefix, PrefixCodec, Result, Stats,
     TreeStats,
 };
+use crate::ordered_float::NonNegativeOrderedFloat as OrderedFloat;
 
 /// Options used to make a query against an arroy [`Reader`].
 pub struct QueryBuilder<'a, D: Distance> {
