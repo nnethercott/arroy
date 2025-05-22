@@ -91,6 +91,7 @@ mod stats;
 pub mod upgrade;
 mod version;
 mod writer;
+mod ordered_float;
 
 #[cfg(test)]
 mod tests;
