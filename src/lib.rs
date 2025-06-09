@@ -83,6 +83,7 @@ mod key;
 mod metadata;
 mod node;
 mod node_id;
+mod ordered_float;
 mod parallel;
 mod reader;
 mod roaring;
@@ -91,7 +92,6 @@ mod stats;
 pub mod upgrade;
 mod version;
 mod writer;
-mod ordered_float;
 
 #[cfg(test)]
 mod tests;

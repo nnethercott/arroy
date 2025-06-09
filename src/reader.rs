@@ -15,14 +15,13 @@ use crate::node::{
     Descendants, GenericReadNode, GenericReadNodeCodecFromV0_4_0, GenericReadNodeCodecFromV0_7_0,
     GenericReadSplitPlaneNormal, ItemIds, Leaf,
 };
+use crate::ordered_float::NonNegativeOrderedFloat as OrderedFloat;
 use crate::unaligned_vector::UnalignedVector;
 use crate::version::{Version, VersionCodec};
 use crate::{
     Database, Error, ItemId, Key, MetadataCodec, Node, NodeId, Prefix, PrefixCodec, Result, Stats,
     TreeStats,
 };
-use crate::ordered_float::NonNegativeOrderedFloat as OrderedFloat;
-
 
 /// Options used to make a query against an arroy [`Reader`].
 pub struct QueryBuilder<'a, D: Distance> {
@@ -371,7 +370,8 @@ impl<'t, D: Distance> Reader<'t, D> {
                     };
                     // this is a similarity
                     queue.push((OrderedFloat(D::pq_distance(dist, margin, Side::Left)), left)); // -margin
-                    queue.push((OrderedFloat(D::pq_distance(dist, margin, Side::Right)), right)); // margin
+                    queue.push((OrderedFloat(D::pq_distance(dist, margin, Side::Right)), right));
+                    // margin
                 }
             }
         }
@@ -607,10 +607,7 @@ pub fn item_leaf<'a, D: Distance>(
 }
 
 // Based on https://quickwit.io/blog/top-k-complexity, implemented in https://github.com/meilisearch/arroy/pull/129
-pub fn median_based_top_k(
-    v: Vec<(OrderedFloat<f32>, u32)>,
-    k: usize,
-) -> Vec<(OrderedFloat<f32>, u32)> {
+pub fn median_based_top_k(v: Vec<(OrderedFloat, u32)>, k: usize) -> Vec<(OrderedFloat, u32)> {
     let mut threshold = (OrderedFloat(f32::MAX), u32::MAX);
     let mut buffer = Vec::with_capacity(2 * k.max(1));
 

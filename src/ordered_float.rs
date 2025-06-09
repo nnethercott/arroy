@@ -1,11 +1,11 @@
-/// A wrapper type implementing `Ord`
+/// A wrapper type around f32s implementing `Ord`
 ///
 /// Since distance metrics satisfy d(x,x)=0 and d(x,y)>0 for x!=y we don't need to operate on the
-/// full range of an f32. Comparing the u32 representation of a non-negative f32 should suffice and
+/// full range of f32's. Comparing the u32 representation of a non-negative f32 should suffice and
 /// is actually a lot quicker.
 ///
-/// We just need to ensure -0.0's and NaN's don't show up anywhere cause f32<Nan<-0
-#[derive(Clone)]
+/// https://en.wikipedia.org/wiki/IEEE_754-1985#NaN
+#[derive(Debug, Clone, Copy)]
 pub struct NonNegativeOrderedFloat(pub f32);
 
 impl PartialEq for NonNegativeOrderedFloat {
@@ -28,4 +28,19 @@ impl Ord for NonNegativeOrderedFloat {
     }
 }
 
-// TODO: add proptests and unit tests here
+#[cfg(test)]
+mod tests {
+    use crate::ordered_float::NonNegativeOrderedFloat;
+    use proptest::prelude::*;
+
+    proptest! {
+        #[test]
+        fn ordering_makes_sense(
+            (upper, lower) in (0.0f32..=f32::MAX).prop_flat_map(|u|{
+                (Just(u), 0.0f32..=u)
+            })
+        ){
+            assert!(NonNegativeOrderedFloat(upper) > NonNegativeOrderedFloat(lower));
+        }
+    }
+}

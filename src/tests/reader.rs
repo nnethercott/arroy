@@ -1,7 +1,6 @@
 use std::fmt::Display;
 use std::num::NonZeroUsize;
 
-use ordered_float::OrderedFloat;
 use proptest::collection::vec;
 use proptest::prelude::*;
 use roaring::RoaringBitmap;
@@ -9,6 +8,7 @@ use roaring::RoaringBitmap;
 use super::*;
 use crate::distance::Cosine;
 use crate::distances::{Euclidean, Manhattan};
+use crate::ordered_float::NonNegativeOrderedFloat as OrderedFloat;
 use crate::reader::median_based_top_k;
 use crate::{ItemId, Reader, Writer};
 
@@ -285,7 +285,7 @@ proptest! {
             (Just(v), k_strategy)
         })
     ){
-        let original: Vec<(OrderedFloat<f32>, u32)> =
+        let original: Vec<(OrderedFloat, u32)> =
             original.into_iter().enumerate().map(|(num, item)| (OrderedFloat(item), num as u32)).collect();
 
         let u = binary_heap_based_top_k(original.clone(), k);
