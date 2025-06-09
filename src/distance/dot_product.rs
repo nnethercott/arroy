@@ -42,9 +42,10 @@ impl Distance for DotProduct {
     }
 
     fn built_distance(p: &Leaf<Self>, q: &Leaf<Self>) -> f32 {
-        // When index is already built, we don't need angular distances to retrieve NNs
-        // Thus, we can return dot product scores itself
-        -dot_product(&p.vector, &q.vector)
+        // ||x-y|| = (x-y)'(x-y) = x'x + y'y -2*x'y
+        let a = &p.vector;
+        let b = &p.vector;
+        dot_product(a, a) + dot_product(b, b) - 2 * dot_product(a, b)
     }
 
     fn non_built_distance(p: &Leaf<Self>, q: &Leaf<Self>) -> f32 {
@@ -71,7 +72,7 @@ impl Distance for DotProduct {
     }
 
     fn normalized_distance(d: f32, _dimension: usize) -> f32 {
-        -d
+        d
     }
 
     fn normalize(node: &mut Leaf<Self>) {

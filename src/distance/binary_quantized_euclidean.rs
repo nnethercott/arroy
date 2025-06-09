@@ -42,7 +42,7 @@ impl Distance for BinaryQuantizedEuclidean {
     }
 
     fn built_distance(p: &Leaf<Self>, q: &Leaf<Self>) -> f32 {
-        squared_euclidean_distance_binary_quantized(&p.vector, &q.vector)
+        squared_euclidean_distance_binary_quantized(&p.vector, &q.vector).max(0.0)
     }
 
     /// Normalizes the distance returned by the distance method.

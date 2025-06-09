@@ -38,7 +38,7 @@ impl Distance for Euclidean {
     }
 
     fn built_distance(p: &Leaf<Self>, q: &Leaf<Self>) -> f32 {
-        euclidean_distance(&p.vector, &q.vector)
+        euclidean_distance(&p.vector, &q.vector).max(0.0)
     }
 
     fn norm_no_header(v: &UnalignedVector<Self::VectorCodec>) -> f32 {
